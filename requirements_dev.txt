@@ -1,3 +1,4 @@
 pip==19.0.3
 jsondiff==1.1.2
 twine==1.13.0
+wheel==0.33.1
