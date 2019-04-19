@@ -76,13 +76,7 @@ def compare_json(json1, json2):
 	unmatchedValues = []
 	json_dict_a = json.loads(json1)
 	json_dict_b = json.loads(json2)
-	for key in json_dict_b.keys():
-	    value = json_dict_b[key] 
-	    if key not in json_dict_a:
-	    	unmatchedKeys.append(key)
-	    else:
-	    	if json_dict_a[key] != value:
-	    		unmatchedValues.append({ key : value })
+	find_diff(json_dict_a, json_dict_b, path="")
 	return unmatchedKeys, unmatchedValues
 
 def get_response(filename):
@@ -90,3 +84,47 @@ def get_response(filename):
 
 def if_exits(filename):
 	return os.path.isfile(filename)
+
+def extract_values_from_key(obj, key):
+    """Pull all values of specified key from nested JSON."""
+    arr = []
+
+    def extract(obj, arr, key):
+        """Recursively search for values of key in JSON tree."""
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                if isinstance(v, (dict, list)):
+                    extract(v, arr, key)
+                elif k == key:
+                    arr.append(v)
+        elif isinstance(obj, list):
+            for item in obj:
+                extract(item, arr, key)
+        return arr
+
+    results = extract(obj, arr, key)
+    return results
+
+def find_diff(dict1, dict2, path = ""):
+    for k in dict1.keys():
+        if  k not in dict2:
+            print (path, ":")
+            print (k + " as key not in second response", "\n")
+        else:
+            if type(dict1[k]) is dict:
+                if path == "":
+                    path = k
+                else:
+                    path = path + "->" + k
+                findDiff(dict1[k],dict2[k], path)
+            else:
+                if dict1[k] != dict2[k]:
+                    print (path, ":")
+                    print (" - ", k," : ", dict1[k])
+                    print (" + ", k," : ", dict2[k] )
+    for k in dict2.keys():
+        if  k not in dict1:
+            print (path, ":")
+            print (k + " as key not in first response", "\n")
+
+

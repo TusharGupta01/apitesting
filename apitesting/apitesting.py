@@ -45,7 +45,7 @@ class ApiTesting:
 		response = self.call_api(method, url, payload, headers)
 		unmatchedKeys, unmatchedValues = self.compare_apis_response(\
 			response.text, response_from_file)
-		generate_cmd_report(unmatchedKeys, unmatchedValues)
+		# generate_cmd_report(unmatchedKeys, unmatchedValues)
 
 	def validate_multiple_api(self, method, requests):
 		i = 0
