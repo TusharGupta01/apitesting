@@ -4,3 +4,4 @@ test.py
 dist/
 build/
 apitesting/__pycache__/
+test.yaml

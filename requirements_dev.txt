@@ -1,4 +1,5 @@
 pip==19.0.3
-jsondiff==1.1.2
+deepdiff==4.0.6
 twine==1.13.0
 wheel==0.33.1
+PyYAML==5.1
