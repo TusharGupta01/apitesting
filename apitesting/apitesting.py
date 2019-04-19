@@ -1,6 +1,7 @@
 import argparse
 import requests
-import apitesting.utils as utils
+from apitesting.utils import *
+from apitesting.decorators import timeit
 
 class ApiTesting:
 	def __init__(self, filename = "", multiple = False, verborse = False):
@@ -8,21 +9,40 @@ class ApiTesting:
 		self.verborse = verborse
 		self.filename = filename
 
-	def diff_apis(self):
-		print ("This is api diff function")
+	def compare_apis_response(self):
+		
 
-	def call_api(self, method = "POST", url, payload, headers):
-		# utils.parse_yaml_file(filename)
-		payload = "{\n\"url\": \"http://localhost:8000/cfutilservice/v1/shorten\"\n}"
-		url = "http://localhost:8000/cfutilservice/v1/shorten"
-		headers = {
-		    'cache-control': "no-cache",
-		    'postman-token': "0230ced8-6e21-80f3-ddc1-b5642ecc2fea"
-		    }
+	def call_api(self, method, url, payload, headers):
 		response = requests.request(method, url, data=payload, headers=headers)
+		return response
 
+	@timeit
 	def run_test(self):
-		readerDict = utils.parse_yaml_file(self.filename)
-		if 
+		yamlDict = parse_yaml_file(self.filename)
+		for key in yamlDict:
+			if key == "APIS":
+				compareApis, method, requests = fetch_details(yamlDict[key])
+				self.process_requests(compareApis, method, requests)
+
+
+	def process_requests(self, compare, method, requests):
+		if compare == True:
+			pass
+		else:
+			for request in requests:
+				self.validate_single_api(method, request)
+
+	def validate_single_api(self, method, request):
+		url, response_file, postData_file, getData_file = \
+		 fetch_request_details(request)
+
+		payload = get_payload(postData_file)
+		headers = None
+		response = self.call_api(method, url, payload, headers)
+		print (response)
+
+
+
+
 
 
