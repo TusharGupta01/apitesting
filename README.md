@@ -25,7 +25,7 @@ $ python3 setup.py install
 
 ### How to use it?
 
-```
+```python
 import apitesting
 
 tester = apitesting.ApiTesting(filename = "test.yaml")
