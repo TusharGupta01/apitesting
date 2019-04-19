@@ -27,6 +27,9 @@ def parse_json(filename):
 	else:
 		return filename + " does not exits or File path is wrong!!"
 
+def load_json(filename):
+	return open(filename, 'rb').read()
+
 def fetch_details(api_dict):
 	compareApis = False
 	method = "POST"
@@ -66,25 +69,24 @@ def fetch_request_details(request):
 	return url, response_file, postData_file, getData_file
 
 def get_payload(filename):
-	return parse_json(filename)
-
-def get_url(filename):
-	return None
+	return load_json(filename)
 
 def compare_json(json1, json2):
-	for key in b.keys():
-	    value = b[key] 
-	    if key not in a:
-	       print "found new key {0} with value {1}".format(key, value)
+	unmatchedKeys = []
+	unmatchedValues = []
+	json_dict_a = json.loads(json1)
+	json_dict_b = json.loads(json2)
+	for key in json_dict_b.keys():
+	    value = json_dict_b[key] 
+	    if key not in json_dict_a:
+	    	unmatchedKeys.append(key)
 	    else:
-	       #check if values are not same
-	       if a[key] != value: print "for key %s values are different" % key
-		return None
+	    	if json_dict_a[key] != value:
+	    		unmatchedValues.append({ key : value })
+	return unmatchedKeys, unmatchedValues
 
-def diff_type(json1, typejson):
-	return None
+def get_response(filename):
+	return load_json(filename)
 
 def if_exits(filename):
 	return os.path.isfile(filename)
-
-
